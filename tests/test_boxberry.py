@@ -38,8 +38,25 @@ def test_get_city_points_not_found(token=TOKEN):
 
 
 def test_get_zips(token=TOKEN):
+    """Проверяем получения списка ZIP кодов"""
     status, result = boxberry.get_list_zips(token)
     assert status == 200
     assert len(result) > 1
     assert 'Zip' in result[0]
     assert 'City' in result[0]
+
+
+def test_check_zip(token=TOKEN):
+    """Проверяем метод проверки данных по определенному ZIP коду"""
+    status, result = boxberry.check_zip(token, '108818')
+    assert status == 200
+    assert len(result) == 1
+    assert 'ExpressDelivery' in result[0]
+
+
+def test_check_unknown_zip(token=TOKEN):
+    """Проверяем метод проверки данных по определенному ZIP коду"""
+    status, result = boxberry.check_zip(token, '12')
+    assert status == 200
+    assert len(result) == 1
+    assert result.get('err') == 'Данные не найдены'

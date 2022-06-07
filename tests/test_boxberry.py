@@ -12,16 +12,34 @@ def test_get_list_cities(token=TOKEN):
     assert len(result) > 0
     assert 'UniqName' in result[0]
 
+
 def test_get_moscow_points(token=TOKEN):
     """Проверяем получение все точек в Москве"""
-    status, result = boxberry.get_moscow_points(token, '68')
+    status, result = boxberry.get_moscow_points(token, '68', '643')
     assert status == 200
     assert len(result) > 0
     assert 'Metro' in result[0]
 
+
 def test_get_city_points_not_found(token=TOKEN):
     """Проверяем получение все точек с несуществующем кодом города """
-    status, result = boxberry.get_moscow_points(token, '10001')
+    status, result = boxberry.get_moscow_points(token, '10001', '643')
     assert status == 200
     assert len(result) == 1
     assert result[0].get('err') == 'Данные не найдены'
+
+
+def test_get_city_points_not_found(token=TOKEN):
+    """Проверяем получение все точек с несуществующем кодом страны """
+    status, result = boxberry.get_moscow_points(token, '68', '77777')
+    assert status == 200
+    assert len(result) == 1
+    assert result[0].get('err') == 'Данные не найдены'
+
+
+def test_get_zips(token=TOKEN):
+    status, result = boxberry.get_list_zips(token)
+    assert status == 200
+    assert len(result) > 1
+    assert 'Zip' in result[0]
+    assert 'City' in result[0]

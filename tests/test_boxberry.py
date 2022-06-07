@@ -11,3 +11,17 @@ def test_get_list_cities(token=TOKEN):
     assert status == 200
     assert len(result) > 0
     assert 'UniqName' in result[0]
+
+def test_get_moscow_points(token=TOKEN):
+    """Проверяем получение все точек в Москве"""
+    status, result = boxberry.get_moscow_points(token, '68')
+    assert status == 200
+    assert len(result) > 0
+    assert 'Metro' in result[0]
+
+def test_get_city_points_not_found(token=TOKEN):
+    """Проверяем получение все точек с несуществующем кодом города """
+    status, result = boxberry.get_moscow_points(token, '10001')
+    assert status == 200
+    assert len(result) == 1
+    assert result[0].get('err') == 'Данные не найдены'
